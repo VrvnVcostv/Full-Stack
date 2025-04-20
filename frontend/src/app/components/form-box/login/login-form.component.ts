@@ -2,6 +2,9 @@ import { Component, signal } from '@angular/core';
 import { User } from '../../../interfaces/user';
 import { InputBoxComponent } from '../../input-box/input-box.component';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { UserDTO } from '../../../interfaces/DTO/userDTO';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login-form-box',
@@ -9,6 +12,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login-form.component.html',
 })
 export class LoginFormComponent {
+
+  constructor(private http: HttpClient, private router: Router) { }
+
   user: User = {
     photo: signal(''),
     username: signal(''),
@@ -17,13 +23,20 @@ export class LoginFormComponent {
     confirmPassword: signal('')
   };
 
- onSubmit(){
-  if(this.user.password() === this.user.confirmPassword()){
-    console.log(this.user.email());
-    console.log(this.user.username());
-    console.log(this.user.password());
-  }else{
-    console.log("Contraseña incorrecta");
+  onSubmit() {
+
+    this.http.get<UserDTO[]>("http://localhost:8080/users").subscribe(
+      {
+        next: (res: UserDTO[]) => {
+          res.forEach(
+            us => {
+              if(us.email !== this.user.email()){return};
+              if(us.password !== this.user.password()){return};
+              this.router.navigate(['/main']);
+            }
+          )
+        }
+      }
+    )
   }
- }
 }
