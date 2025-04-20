@@ -3,10 +3,11 @@ import { InputBoxComponent } from '../../input-box/input-box.component';
 import { User } from '../../../interfaces/user';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ImageBoxComponent } from "../../image-box/image-box.component";
 
 @Component({
   selector: 'register-form-box',
-  imports: [InputBoxComponent, FormsModule],
+  imports: [InputBoxComponent, FormsModule, ImageBoxComponent],
   templateUrl: './register-form-box.component.html',
 })
 export class RegisterFormBoxComponent {
@@ -36,9 +37,6 @@ export class RegisterFormBoxComponent {
           console.log("Error: ", err)
         }
       });
-      console.log(this.user.email());
-      console.log(this.user.username());
-      console.log(this.user.password());
     }else{
       console.log("Contraseña incorrecta");
     }

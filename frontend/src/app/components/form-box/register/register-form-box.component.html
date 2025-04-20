@@ -1,12 +1,13 @@
 <div class="container d-flex justify-content-center mt-5">
-  <div class="card shadow p-4" style="width: 33%;">
+  <div class="card shadow p-4" style="width: 44%;">
     <h5 class="card-title">Register</h5>
     <form (ngSubmit)="onSubmit()">
+      <image-box></image-box>
       <input-box title="Email" placeholder="Ingrese su email" type="" (valueChanged)="user.email.set($event)"></input-box>
       <input-box title="Username" placeholder="Ingrese su username" type="" (valueChanged)="user.username.set($event)"></input-box>
       <input-box title="Password" placeholder="Ingrese su password" type="password" (valueChanged)="user.password.set($event)"></input-box>
       <input-box title="Confirm Password" placeholder="Confirme su password" type="password" (valueChanged)="user.confirmPassword.set($event)"></input-box>
-      <button type="submit" class="btn btn-primary w-100 mt-4">Registrarse</button>
+      <button type="submit" class="btn btn-dark w-100 mt-4">Registrarse</button>
     </form>
   </div>
 </div>

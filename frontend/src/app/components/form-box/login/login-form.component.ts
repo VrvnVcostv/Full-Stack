@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { User } from '../../../../interfaces/user';
-import { InputBoxComponent } from '../../../input-box/input-box.component';
+import { User } from '../../../interfaces/user';
+import { InputBoxComponent } from '../../input-box/input-box.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
