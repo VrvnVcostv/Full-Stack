@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class LoginFormComponent {
   user: User = {
+    photo: signal(''),
     username: signal(''),
     email: signal(''),
     password: signal(''),

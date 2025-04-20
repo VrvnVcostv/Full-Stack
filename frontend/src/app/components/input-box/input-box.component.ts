@@ -17,4 +17,5 @@ export class InputBoxComponent {
     const value = (event.target as HTMLInputElement).value;
     this.valueChanged.emit(value);
   }
+
 }

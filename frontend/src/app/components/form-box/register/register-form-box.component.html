@@ -2,7 +2,7 @@
   <div class="card shadow p-4" style="width: 44%;">
     <h5 class="card-title">Register</h5>
     <form (ngSubmit)="onSubmit()">
-      <image-box></image-box>
+      <image-box (photo)="photoFile.set($event)"></image-box>
       <input-box title="Email" placeholder="Ingrese su email" type="" (valueChanged)="user.email.set($event)"></input-box>
       <input-box title="Username" placeholder="Ingrese su username" type="" (valueChanged)="user.username.set($event)"></input-box>
       <input-box title="Password" placeholder="Ingrese su password" type="password" (valueChanged)="user.password.set($event)"></input-box>

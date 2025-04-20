@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { InputBoxComponent } from '../../input-box/input-box.component';
 import { User } from '../../../interfaces/user';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ImageBoxComponent } from "../../image-box/image-box.component";
+import { CloudinaryService } from '../../../services/cloudinaryService';
 
 @Component({
   selector: 'register-form-box',
@@ -11,34 +12,58 @@ import { ImageBoxComponent } from "../../image-box/image-box.component";
   templateUrl: './register-form-box.component.html',
 })
 export class RegisterFormBoxComponent {
-    user: User = {
-      username: signal(''),
-      email: signal(''),
-      password: signal(''),
-      confirmPassword: signal('')
-    };
 
-    constructor(private http: HttpClient){}
+  photoFile = signal<File | undefined>(undefined);
 
-   onSubmit(){
-    const body = {
-      username: this.user.username(),
-      email: this.user.email(),
-      password: this.user.password(),
-      photo: "placeholder"
+  user: User = {
+    photo: signal(''),
+    username: signal(''),
+    email: signal(''),
+    password: signal(''),
+    confirmPassword: signal(''),
+  };
+
+  constructor(private http: HttpClient, private cloudinaryService: CloudinaryService) { }
+
+  onSubmit() {
+    const file = this.photoFile();
+    if (!file) {
+      console.log('⚠️ No hay foto seleccionada');
+      return;
     }
-    const url: string = "http://127.0.0.1:8080/users"
-    if(this.user.password() === this.user.confirmPassword()){
-      this.http.post(url, body).subscribe({
-        next: (res) =>{
-          console.log("Usuario registrado", res)
-        },
-        error: (err) =>{
-          console.log("Error: ", err)
-        }
-      });
-    }else{
-      console.log("Contraseña incorrecta");
+
+    if (this.user.password() !== this.user.confirmPassword()) {
+      console.log('❌ Contraseña incorrecta');
+      return;
     }
-   }
- }
+
+    this.cloudinaryService.uploadImage(file).subscribe({
+      next: (res: any) => {
+        const imageUrl = res.secure_url;
+        this.user.photo.set(imageUrl);
+
+
+        const body = {
+          username: this.user.username(),
+          email: this.user.email(),
+          password: this.user.password(),
+          photo: imageUrl
+        };
+
+        const url = "http://127.0.0.1:8080/users";
+
+        this.http.post(url, body).subscribe({
+          next: (res) => {
+            console.log("✅ Usuario registrado", res);
+          },
+          error: (err) => {
+            console.error("❌ Error al registrar usuario:", err);
+          }
+        });
+      },
+      error: (err) => {
+        console.error('❌ Error al subir imagen:', err);
+      }
+    });
+  }
+}
