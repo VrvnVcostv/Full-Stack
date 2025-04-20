@@ -3,9 +3,6 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class CloudinaryService {
-  private cloudName = 'angular_upload';
-  private uploadPreset = 'angular_upload';
-
   constructor(private http: HttpClient) {}
 
   uploadImage(file: File) {

@@ -5,15 +5,17 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserDTO } from '../../../interfaces/DTO/userDTO';
 import { Router } from '@angular/router';
+import { UserService } from '../../../services/Singletons/userService';
 
 @Component({
   selector: 'login-form-box',
   imports: [InputBoxComponent, FormsModule],
   templateUrl: './login-form.component.html',
 })
+
 export class LoginFormComponent {
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private userService: UserService) { }
 
   user: User = {
     photo: signal(''),
@@ -32,6 +34,7 @@ export class LoginFormComponent {
             us => {
               if(us.email !== this.user.email()){return};
               if(us.password !== this.user.password()){return};
+              this.userService.setUser(us);
               this.router.navigate(['/main']);
             }
           )
