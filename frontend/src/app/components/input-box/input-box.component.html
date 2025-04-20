@@ -1,0 +1,13 @@
+<div class="container mt-1 d-flex justify-content-center">
+  <div style="width: 100%; max-width: 400px;">
+    <div class="mb-3">
+      <label class="form-label">{{title()}}</label>
+      <input
+      class="form-control"
+      [type]=type()
+      [placeholder]=placeholder()
+      (input)="onInputChange($event)"
+      />
+    </div>
+  </div>
+</div>
