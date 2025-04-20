@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { User } from '../../../../interfaces/user';
 import { InputBoxComponent } from '../../../input-box/input-box.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'login-form-box',
-  imports: [InputBoxComponent],
+  imports: [InputBoxComponent, FormsModule],
   templateUrl: './login-form.component.html',
 })
 export class LoginFormComponent {
