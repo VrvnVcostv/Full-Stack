@@ -47,4 +47,11 @@ export class UserService {
       map(users => users.some(u => u.username === username))
     );
   }
+
+  login(email: string, password: string): Observable<any> {
+    return this.http.post('http://localhost:8080/users/auth/login', {
+      email,
+      password
+    });
+  }
 }

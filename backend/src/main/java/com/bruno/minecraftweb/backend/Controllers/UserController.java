@@ -1,9 +1,13 @@
 package com.bruno.minecraftweb.backend.Controllers;
 
+import com.bruno.minecraftweb.backend.Entities.LoginRequest;
 import com.bruno.minecraftweb.backend.Entities.User;
+import com.bruno.minecraftweb.backend.Repository.UserRepository;
 import com.bruno.minecraftweb.backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +19,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers(){
@@ -49,5 +59,18 @@ public class UserController {
         }else{
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Optional<User> userOpt = userRepository.findByEmail(loginRequest.getEmail());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña inválidos");
+        }
+        User user = userOpt.get();
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña inválidos");
+        }
+        return ResponseEntity.ok().build();
     }
 }

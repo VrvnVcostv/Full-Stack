@@ -44,26 +44,18 @@ export class LoginFormComponent {
   }
 
   private async login(email: string, password: string): Promise<void> {
-    try {
-      const users = await this.userService.getAllAsync();
-      const user = users.find(u => u.email === email);
-
-      if (!user || user.password !== password) {
+    this.userService.login(email, password).subscribe({
+      next: () => {
+        this.alertMessage.set('');
+        this.loginStatus.emit('success');
+        this.isSubmiting.set(false);
+      },
+      error: () => {
         this.alertMessage.set('El usuario o contraseña son incorrectos');
         this.loginStatus.emit('notFound');
         this.isSubmiting.set(false);
-        return;
       }
-
-      this.alertMessage.set('');
-      this.hasBeenSubmited.set(true);
-      this.loginStatus.emit('success');
-      this.isSubmiting.set(false);
-    } catch (err) {
-      this.alertMessage.set('Error al conectar con el servidor');
-      this.loginStatus.emit('notFound');
-      this.isSubmiting.set(false);
-    }
+    });
   }
 
   private isValidForm(email: string, password: string): boolean {
