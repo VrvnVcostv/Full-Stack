@@ -8,6 +8,8 @@
       <input-box title="Password" placeholder="Ingrese su password" type="password" (valueChanged)="user.password.set($event)"></input-box>
       <input-box title="Confirm Password" placeholder="Confirme su password" type="password" (valueChanged)="user.confirmPassword.set($event)"></input-box>
       <button [disabled]="isSubmiting()" type="submit" class="btn btn-dark w-100 mt-4">Registrarse</button>
+      <section *ngIf="isSubmiting()">
+      </section>
       <a routerLink="/login" class="container d-flex justify-content-center mt-2">Ya tengo cuenta</a>
     </form>
   </div>

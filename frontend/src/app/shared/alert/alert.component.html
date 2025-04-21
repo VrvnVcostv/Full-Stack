@@ -1,0 +1,9 @@
+<div
+      [@fadeInOut]
+      class="alert-container"
+    >
+      <c-alert [color]="color()" class="d-flex align-items-center gap-2">
+        <svg [cIcon]="setIcon()" width="25px"/>
+        <div>{{message()}}</div>
+      </c-alert>
+    </div>

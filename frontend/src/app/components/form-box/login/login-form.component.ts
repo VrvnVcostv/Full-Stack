@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, output, signal, WritableSignal } from '@angular/core';
 import { UserForm } from '../../../interfaces/Form/userForm';
 import { InputBoxComponent } from '../../input-box/input-box.component';
 import { FormsModule } from '@angular/forms';
@@ -6,14 +6,19 @@ import { HttpClient } from '@angular/common/http';
 import { UserDTO } from '../../../interfaces/DTO/userDTO';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../services/Singletons/userService';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'login-form-box',
-  imports: [InputBoxComponent, FormsModule, RouterLink],
+  imports: [InputBoxComponent, FormsModule, RouterLink, CommonModule],
   templateUrl: './login-form.component.html',
 })
 
 export class LoginFormComponent {
+
+  isSubmitingEmitter = output<boolean>();
+  isSubmiting = signal(false);
 
   constructor(private http: HttpClient, private router: Router, private userService: UserService) { }
 
@@ -29,7 +34,8 @@ export class LoginFormComponent {
     const email = this.user.email().trim();
     const password = this.user.password().trim();
     if(!this.validateForm(email, password)){return;}
-
+    this.isSubmitingEmitter.emit(true);
+    this.isSubmiting.set(true);
     this.loginUser(email, password);
   }
 
@@ -52,13 +58,18 @@ export class LoginFormComponent {
           const user = users.find(u => u.email === email);
 
           if(!user) return this.showError("El usuario no existe");
-          if(!password) return this.showError("Contraseña incorrecta");
-
+          if(password != user.password) return this.showError("Contraseña incorrecta");
           this.userService.setUser(user);
-          this.router.navigate(['/main']);
+          setTimeout(() => {
+            this.isSubmiting.set(false);
+            this.isSubmitingEmitter.emit(false);
+            this.router.navigate(['/main']);
+          }, 2000);
         },
         error: err =>{
           this.showError("No se pudo conectar al servidor");
+          this.isSubmiting.set(false);
+          this.isSubmitingEmitter.emit(false);
           console.error(err);
         }
       }

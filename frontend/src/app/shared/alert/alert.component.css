@@ -1,0 +1,7 @@
+.alert-container {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1050;
+  min-width: 300px;
+}

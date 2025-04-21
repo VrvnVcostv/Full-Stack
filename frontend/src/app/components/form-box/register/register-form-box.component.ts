@@ -6,10 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { ImageBoxComponent } from "../../image-box/image-box.component";
 import { CloudinaryService } from '../../../services/cloudinaryService';
 import { RouterLink } from '@angular/router';
+import { AlertComponent } from "../../../shared/alert/alert.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'register-form-box',
-  imports: [InputBoxComponent, FormsModule, ImageBoxComponent, RouterLink],
+  imports: [InputBoxComponent, FormsModule, ImageBoxComponent, RouterLink, AlertComponent, CommonModule],
   templateUrl: './register-form-box.component.html',
 })
 export class RegisterFormBoxComponent {

@@ -1,2 +1,5 @@
 <banner title="¡Bienvenido a MiApp!" subtitle="Ingresa para continuar con tu sesión"></banner>
-<login-form-box></login-form-box>
+<login-form-box (isSubmitingEmitter)="isSubmiting.set($event)"></login-form-box>
+<section *ngIf="isSubmiting()">
+  <alert-component color="success" iconName="logued" message="Logueado correctamente"></alert-component>
+</section>
