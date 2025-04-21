@@ -1,2 +1,7 @@
 <banner title="Registrarse" subtitle="Rellene sus datos"></banner>
-<register-form-box></register-form-box>
+<register-form-box
+(registerStatus)="handleRegisterStatus($event)"
+></register-form-box>
+<section *ngIf="isAlertVisible()">
+  <alert-component [color]="color()" [iconName]="icon()" [message]="alertMessage()"></alert-component>
+</section>

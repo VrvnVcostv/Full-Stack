@@ -7,10 +7,18 @@
       <input-box title="Username" placeholder="Ingrese su username" type="" (valueChanged)="user.username.set($event)"></input-box>
       <input-box title="Password" placeholder="Ingrese su password" type="password" (valueChanged)="user.password.set($event)"></input-box>
       <input-box title="Confirm Password" placeholder="Confirme su password" type="password" (valueChanged)="user.confirmPassword.set($event)"></input-box>
-      <button [disabled]="isSubmiting()" type="submit" class="btn btn-dark w-100 mt-4">Registrarse</button>
+      <p class="d-flex justify-content-center text-danger">{{alertMessage()}}</p>
+      <section class="mt-4">
+        <ng-container *ngIf="!isSubmiting(); else loading">
+          <button type="submit" class="btn btn-dark w-100" cLoadingButton>Registrarse</button>
+        </ng-container>
+        <ng-template #loading>
+          <div class="spinner-border container d-flex justify-content-center" role="status"></div>
+        </ng-template>
+      </section>
       <section *ngIf="isSubmiting()">
       </section>
-      <a routerLink="/login" class="container d-flex justify-content-center mt-2">Ya tengo cuenta</a>
+      <a routerLink="/login" class="container d-flex justify-content-center mt-3">Ya tengo cuenta</a>
     </form>
   </div>
 </div>

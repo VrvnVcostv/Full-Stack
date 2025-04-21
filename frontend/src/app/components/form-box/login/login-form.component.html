@@ -2,20 +2,17 @@
   <div class="card shadow p-4" style="width: 33%;">
     <h5 class="card-title">Login</h5>
     <form (ngSubmit)="onSubmit()">
-      <input-box title="Email" placeholder="Ingrese su email" type=""
-        (valueChanged)="user.email.set($event)"></input-box>
-      <input-box title="Password" placeholder="Ingrese su contraseña" type="password"
-        (valueChanged)="user.password.set($event)"></input-box>
-        <p class="d-flex justify-content-center text-danger">{{messageInput()}}</p>
-        <section class="mt-4">
-          <ng-container *ngIf="!isSubmiting(); else loading">
-            <button type="submit" class="btn btn-dark w-100" cLoadingButton>Entrar</button>
-          </ng-container>
-        
-          <ng-template #loading>
-            <div class="spinner-border container d-flex justify-content-center" role="status"></div>
-          </ng-template>
-        </section>
+      <input-box title="Email" placeholder="Ingrese su email" type="" (valueChanged)="user.email.set($event)"></input-box>
+      <input-box title="Password" placeholder="Ingrese su contraseña" type="password" (valueChanged)="user.password.set($event)"></input-box>
+      <p class="d-flex justify-content-center text-danger">{{alertMessage()}}</p>
+      <section class="mt-4">
+        <ng-container *ngIf="!isSubmiting(); else loading">
+          <button type="submit" class="btn btn-dark w-100" cLoadingButton>Entrar</button>
+        </ng-container>
+        <ng-template #loading>
+          <div class="spinner-border container d-flex justify-content-center" role="status"></div>
+        </ng-template>
+      </section>
       <a routerLink="/register" class="container d-flex justify-content-center mt-3">Registrarse</a>
     </form>
   </div>

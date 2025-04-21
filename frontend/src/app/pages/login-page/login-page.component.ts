@@ -1,3 +1,4 @@
+import { Router, RouterLink } from '@angular/router';
 import { Component, WritableSignal, signal } from '@angular/core';
 import { LoginFormComponent } from "../../components/form-box/login/login-form.component";
 import { BannerComponent } from "../../shared/banner/banner.component";
@@ -11,36 +12,38 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login-page.component.css',
 })
 export class LoginPageComponent {
+  constructor(private routes: Router) { }
 
   // Booleanos de validación de campos
-  isSubmiting: WritableSignal<boolean> = signal(false);
-  isEmailValid: WritableSignal<boolean> = signal(false);
-  isEmailEmpty: WritableSignal<boolean> = signal(false);
-  isPasswordEmpty: WritableSignal<boolean> = signal(false);
-  isFormEmpty: WritableSignal<boolean> = signal(false);
+  isAlertVisible: WritableSignal<boolean> = signal(false);
 
   //Señales internas
   color: WritableSignal<"success" | "danger" | "warning"> = signal("success");
-  icon: WritableSignal<"logued" | "loading" | "failed"> = signal("logued");
-  message: WritableSignal<string> = signal("");
+  icon: WritableSignal<"success" | "loading" | "failed"> = signal("success");
   alertMessage: WritableSignal<string> = signal("");
 
   handleLoginStatus(status: 'success' | 'notFound' | 'wrongPassword' | 'invalidForm') {
     switch (status) {
       case 'success':
-        this.message.set("");
+        this.isAlertVisible.set(true);
         this.alertMessage.set("Iniciando Sesión");
         this.icon.set('loading');
         this.color.set('success');
+        setTimeout(() => {
+          this.isAlertVisible.set(false);
+        }, 1250);
+        setTimeout(() => {
+          this.routes.navigate(['main']);
+        }, 2000);
         break;
       case 'notFound':
-        this.message.set("Usuario no encontrado");
+        //TODO
         break;
       case 'wrongPassword':
-        this.message.set("Contraseña o usuario incorrecto");
+        //TODO
         break;
       case 'invalidForm':
-        this.message.set("Formulario inválido");
+        //TODO
         break;
     }
   }

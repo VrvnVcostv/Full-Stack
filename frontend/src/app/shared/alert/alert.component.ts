@@ -24,13 +24,13 @@ import { IconDirective } from '@coreui/icons-angular';
 export class AlertComponent {
 
   color: InputSignal<'success' | 'danger' | 'warning'> = input.required();
-  iconName: InputSignal<'logued' | 'loading' | 'failed'> = input.required();
+  iconName: InputSignal<'success' | 'loading' | 'failed'> = input.required();
   message: InputSignal<string> = input.required();
   iconsCollection = { cilCheckCircle, cilWarning};
 
   setIcon(): string[] {
     switch (this.iconName()) {
-      case 'logued':
+      case 'success':
         return this.iconsCollection.cilCheckCircle;
       case 'loading':
         return this.iconsCollection.cilCheckCircle;
