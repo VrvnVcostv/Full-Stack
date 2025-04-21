@@ -1,0 +1,5 @@
+<banner title="Main Page" subtitle="Este eres tu"></banner>
+<hr>
+<image-holder [photoPreviewUrl]="this.sessionService.getUser()?.photo!"></image-holder>
+<p class="text-primary container d-flex justify-content-center mt-5">Hola {{this.sessionService.getUser()?.username}}!!</p>
+<p class="text-primary container d-flex justify-content-center mt-5">{{this.sessionService.getUser()?.email}}</p>

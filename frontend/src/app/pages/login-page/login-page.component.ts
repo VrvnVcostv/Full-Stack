@@ -4,6 +4,7 @@ import { LoginFormComponent } from "../../components/form-box/login/login-form.c
 import { BannerComponent } from "../../shared/banner/banner.component";
 import { AlertComponent } from "../../shared/alert/alert.component";
 import { CommonModule } from '@angular/common';
+import { SessionService } from '../../services/sessionService';
 
 @Component({
   selector: 'login-page',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login-page.component.css',
 })
 export class LoginPageComponent {
-  constructor(private routes: Router) { }
+  constructor(private routes: Router, private sessionService: SessionService) {sessionService.clear()}
 
   // Booleanos de validación de campos
   isAlertVisible: WritableSignal<boolean> = signal(false);

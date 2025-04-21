@@ -1,11 +1,15 @@
-import { Component, input, InputSignal, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { SessionService } from '../../services/sessionService';
+import { ImageHolderComponent } from "../../components/image-holder/image-holder.component";
+import { BannerComponent } from "../../shared/banner/banner.component";
 
 @Component({
   selector: 'app-main-page',
-  imports: [],
+  imports: [ImageHolderComponent, BannerComponent],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css',
 })
 export class MainPageComponent {
+  constructor(public sessionService: SessionService){}
 
 }
