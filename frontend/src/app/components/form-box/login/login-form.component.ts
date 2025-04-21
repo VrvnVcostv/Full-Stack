@@ -1,4 +1,4 @@
-import { Component, output, signal, WritableSignal } from '@angular/core';
+import { Component, input, InputSignal, output, signal, WritableSignal } from '@angular/core';
 import { UserForm } from '../../../interfaces/Form/userForm';
 import { InputBoxComponent } from '../../input-box/input-box.component';
 import { FormsModule } from '@angular/forms';
@@ -16,12 +16,6 @@ import { CommonModule } from '@angular/common';
 })
 
 export class LoginFormComponent {
-
-  isSubmitingEmitter = output<boolean>();
-  isSubmiting = signal(false);
-
-  constructor(private http: HttpClient, private router: Router, private userService: UserService) { }
-
   user: UserForm = {
     photo: signal(''),
     username: signal(''),
@@ -30,58 +24,92 @@ export class LoginFormComponent {
     confirmPassword: signal('')
   };
 
+  //Inputs del padre
+  messageInput: InputSignal<string> = input.required();
+
+  //Outputs al padre
+  isSubmitingEmitter = output<boolean>();
+  isEmailValidEmitter = output<boolean>(); 
+  isEmailEmptyEmitter = output<boolean>(); 
+  isPasswordEmptyEmitter = output<boolean>(); 
+  isFormEmptyEmitter = output<boolean>(); 
+  loginStatus = output<'success' | 'notFound' | 'wrongPassword' | 'invalidForm'>();
+
+  //Singals del componente
+  isSubmiting = signal(false);
+
+  constructor(private http: HttpClient, private router: Router, private userService: UserService) { }
+
   onSubmit() {
     const email = this.user.email().trim();
     const password = this.user.password().trim();
-    if(!this.validateForm(email, password)){return;}
-    this.isSubmitingEmitter.emit(true);
+
+    const isFormValid = this.isValidForm(email, password);
+    const isEmailFormatValid = this.isValidEmail(email);
+
+    if (!isFormValid || !isEmailFormatValid) {
+      this.loginStatus.emit('invalidForm');
+      return;
+    }
+
+    if (!isFormValid || !isEmailFormatValid) return;
+
     this.isSubmiting.set(true);
-    this.loginUser(email, password);
+    this.isSubmitingEmitter.emit(true);
+
+    this.login(email, password);
   }
 
-  private validateForm(email: string, password: string): boolean {
-
-    if (!email || !password) {
-      this.showError('Campos vacíos');
-      return false; }
-    if (!this.validEmail(email)) {
-      this.showError('Email no válido');
-      return false; }
-
-    return true;
+  private isValidForm(email: string, password: string): boolean {
+    const formIsEmpty = !email && !password;
+    const passwordIsEmpty = !password;
+    const emailIsEmpty = !email;
+    this.isFormEmptyEmitter.emit(formIsEmpty);
+    this.isPasswordEmptyEmitter.emit(passwordIsEmpty);
+    this.isEmailEmptyEmitter.emit(emailIsEmpty);
+    return !formIsEmpty && !passwordIsEmpty && !emailIsEmpty;
   }
 
-  private loginUser(email: string, password: string): void {
-    this.http.get<UserDTO[]>("http://localhost:8080/users").subscribe(
-      {
-        next: users => {
-          const user = users.find(u => u.email === email);
+  private isValidEmail(email: string): boolean {
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    this.isEmailValidEmitter.emit(emailValid);
+    return emailValid;
+  }
 
-          if(!user) return this.showError("El usuario no existe");
-          if(password != user.password) return this.showError("Contraseña incorrecta");
-          this.userService.setUser(user);
-          setTimeout(() => {
-            this.isSubmiting.set(false);
-            this.isSubmitingEmitter.emit(false);
-            this.router.navigate(['/main']);
-          }, 2000);
-        },
-        error: err =>{
-          this.showError("No se pudo conectar al servidor");
+  private login(email: string, password: string): void {
+    this.http.get<UserDTO[]>("http://localhost:8080/users").subscribe({
+      next: users => {
+        const user = users.find(u => u.email === email);
+
+        if (!user) {
+          this.loginStatus.emit('notFound');
           this.isSubmiting.set(false);
           this.isSubmitingEmitter.emit(false);
-          console.error(err);
+          return;
         }
+
+        if (user.password !== password) {
+          this.loginStatus.emit('wrongPassword');
+          this.isSubmiting.set(false);
+          this.isSubmitingEmitter.emit(false);
+          return;
+        }
+
+        this.userService.setUser(user);
+        this.loginStatus.emit('success');
+
+        setTimeout(() => {
+          this.isSubmiting.set(false);
+          this.isSubmitingEmitter.emit(false);
+          this.router.navigate(['/main']);
+        }, 2000);
+      },
+      error: err => {
+        console.error("Error al obtener usuarios", err);
+        this.loginStatus.emit('notFound');
+        this.isSubmiting.set(false);
+        this.isSubmitingEmitter.emit(false);
       }
-    )
-  }
-
-  private validEmail(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  private showError(msg: string): void{
-    console.warn(msg);
-    return;
+    });
   }
 }
