@@ -2,8 +2,8 @@
   <div class="card shadow p-4" style="width: 33%;">
     <h5 class="card-title">Login</h5>
     <form (ngSubmit)="onSubmit()">
-      <input-box title="Email" placeholder="Ingrese su email" type="" (valueChanged)="user.email.set($event)"></input-box>
-      <input-box title="Password" placeholder="Ingrese su contraseña" type="password" (valueChanged)="user.password.set($event)"></input-box>
+      <input-box title="Email" placeholder="Ingrese su email" type="" (valueChanged)="user.email.set($event)" [isEnabled]="hasBeenSubmited()"></input-box>
+      <input-box title="Password" placeholder="Ingrese su contraseña" type="password" (valueChanged)="user.password.set($event)" [isEnabled]="hasBeenSubmited()"></input-box>
       <p class="d-flex justify-content-center text-danger">{{alertMessage()}}</p>
       <section class="mt-4">
         <ng-container *ngIf="!isSubmiting(); else loading">

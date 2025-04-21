@@ -3,14 +3,14 @@
     <h5 class="card-title">Register</h5>
     <form (ngSubmit)="onSubmit()">
       <image-box (photo)="photoFile.set($event)"></image-box>
-      <input-box title="Email" placeholder="Ingrese su email" type="" (valueChanged)="user.email.set($event)"></input-box>
-      <input-box title="Username" placeholder="Ingrese su username" type="" (valueChanged)="user.username.set($event)"></input-box>
-      <input-box title="Password" placeholder="Ingrese su password" type="password" (valueChanged)="user.password.set($event)"></input-box>
-      <input-box title="Confirm Password" placeholder="Confirme su password" type="password" (valueChanged)="user.confirmPassword.set($event)"></input-box>
+      <input-box title="Email" placeholder="Ingrese su email" type="" (valueChanged)="user.email.set($event)" [isEnabled]="hasBeenSubmited()"></input-box>
+      <input-box title="Username" placeholder="Ingrese su username" type="" (valueChanged)="user.username.set($event)" [isEnabled]="hasBeenSubmited()"></input-box>
+      <input-box title="Password" placeholder="Ingrese su password" type="password" (valueChanged)="user.password.set($event)" [isEnabled]="hasBeenSubmited()"></input-box>
+      <input-box title="Confirm Password" placeholder="Confirme su password" type="password" (valueChanged) ="user.confirmPassword.set($event)" [isEnabled]="hasBeenSubmited()"></input-box>
       <p class="d-flex justify-content-center text-danger">{{alertMessage()}}</p>
       <section class="mt-4">
         <ng-container *ngIf="!isSubmiting(); else loading">
-          <button type="submit" class="btn btn-dark w-100" cLoadingButton>Registrarse</button>
+          <button type="submit" class="btn btn-dark w-100" cLoadingButton [disabled]="hasBeenSubmited()">Registrarse</button>
         </ng-container>
         <ng-template #loading>
           <div class="spinner-border container d-flex justify-content-center" role="status"></div>

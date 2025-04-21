@@ -2,11 +2,9 @@ import { Component, output, signal, WritableSignal } from '@angular/core';
 import { UserForm } from '../../../interfaces/Form/userForm';
 import { InputBoxComponent } from '../../input-box/input-box.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { UserDTO } from '../../../interfaces/DTO/userDTO';
-import { UserService } from '../../../services/Singletons/userService';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { UserService } from '../../../services/userService';
 
 
 @Component({
@@ -16,7 +14,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 })
 
 export class LoginFormComponent {
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private userService: UserService) { }
 
   user: UserForm = {
     photo: signal(''),
@@ -31,39 +29,41 @@ export class LoginFormComponent {
 
   //Singals del componente
   isSubmiting = signal(false);
+  hasBeenSubmited: WritableSignal<boolean> = signal(false);
   alertMessage: WritableSignal<string> = signal("");
 
-
-  onSubmit() {
+  async onSubmit() {
     const email = this.user.email().trim();
     const password = this.user.password().trim();
 
     const isFormValid = this.isValidForm(email, password);
+    if (!isFormValid) return;
 
-    if (!isFormValid) { return; }
     this.isSubmiting.set(true);
-    this.login(email, password);
+    await this.login(email, password);
   }
 
-  private login(email: string, password: string): void {
-    this.http.get<UserDTO[]>("http://localhost:8080/users").subscribe({
-      next: users => {
-        const user = users.find(u => u.email === email);
+  private async login(email: string, password: string): Promise<void> {
+    try {
+      const users = await this.userService.getAllAsync();
+      const user = users.find(u => u.email === email);
 
-        if (!user || user.password !== password) {
-          this.alertMessage.set('El usuario o contraseña son incorrectos')
-          this.isSubmiting.set(false);
-          return;
-        }
-        this.alertMessage.set('')
-        this.userService.setUser(user);
-        this.loginStatus.emit('success');
-      },
-      error: err => {
+      if (!user || user.password !== password) {
+        this.alertMessage.set('El usuario o contraseña son incorrectos');
         this.loginStatus.emit('notFound');
         this.isSubmiting.set(false);
+        return;
       }
-    });
+
+      this.alertMessage.set('');
+      this.hasBeenSubmited.set(true);
+      this.loginStatus.emit('success');
+      this.isSubmiting.set(false);
+    } catch (err) {
+      this.alertMessage.set('Error al conectar con el servidor');
+      this.loginStatus.emit('notFound');
+      this.isSubmiting.set(false);
+    }
   }
 
   private isValidForm(email: string, password: string): boolean {
