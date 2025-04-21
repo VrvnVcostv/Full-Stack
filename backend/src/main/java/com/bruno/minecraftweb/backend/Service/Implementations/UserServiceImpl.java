@@ -4,6 +4,7 @@ import com.bruno.minecraftweb.backend.Entities.User;
 import com.bruno.minecraftweb.backend.Repository.UserRepository;
 import com.bruno.minecraftweb.backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers() {
@@ -38,6 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        String passwordEncriptada = passwordEncoder.encode(user.getPassword());
+        user.setPassword(passwordEncriptada);
         return userRepository.save(user);
     }
 
