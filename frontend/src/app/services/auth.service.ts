@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { UserDTO } from '../interfaces/DTO/userDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,22 @@ export class AuthService {
       { email, password }
     ).pipe(
       map(response => {
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('accessToken', response.token);
+        localStorage.setItem('refreshToken', response.refreshToken);
+        return response;
+      })
+    );
+  }
+
+  register(user: UserDTO): Observable<any> {
+    return this.http.post<{ token: string, refreshToken: string }>(
+      'http://localhost:8080/auth/register',
+      user
+    ).pipe(
+      map(response => {
+        console.log(response.token);
+        console.log(response.refreshToken);
+        localStorage.setItem('accessToken', response.token);
         localStorage.setItem('refreshToken', response.refreshToken);
         return response;
       })
