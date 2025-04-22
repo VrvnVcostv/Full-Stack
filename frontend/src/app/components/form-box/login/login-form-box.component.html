@@ -7,7 +7,7 @@
       <p class="d-flex justify-content-center text-danger">{{alertMessage()}}</p>
       <section class="mt-4">
         <ng-container *ngIf="!isSubmiting(); else loading">
-          <button type="submit" class="btn btn-dark w-100" cLoadingButton>Entrar</button>
+          <button type="submit" class="btn btn-dark w-100" cLoadingButton [disabled]="hasBeenSubmited()">Entrar</button>
         </ng-container>
         <ng-template #loading>
           <div class="spinner-border container d-flex justify-content-center" role="status"></div>

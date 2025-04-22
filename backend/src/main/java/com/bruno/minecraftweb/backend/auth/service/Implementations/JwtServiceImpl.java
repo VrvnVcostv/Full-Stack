@@ -33,7 +33,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateRefreshToken(User user) {
-        return buildToken(user, jwtExpiration);
+        return buildToken(user, refreshExpiration);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class JwtServiceImpl implements JwtService {
                 .claims(Map.of("username", user.getUsername()))
                 .subject(user.getEmail())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .signWith(getSignInKey())
                 .compact();
     }
 

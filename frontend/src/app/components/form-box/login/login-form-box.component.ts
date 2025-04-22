@@ -5,14 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../../services/userService';
-import { SessionService } from '../../../services/sessionService';
 import { AuthService } from '../../../services/auth.service';
 
 
 @Component({
   selector: 'login-form-box',
   imports: [InputBoxComponent, FormsModule, CommonModule, RouterLink],
-  templateUrl: './login-form.component.html',
+  templateUrl: './login-form-box.component.html',
 })
 
 export class LoginFormComponent {
@@ -46,6 +45,7 @@ export class LoginFormComponent {
   }
 
   private async login(email: string, password: string): Promise<void> {
+    this.hasBeenSubmited.set(true);
     this.authService.login(email, password).subscribe({
       next: () => {
         this.alertMessage.set('');
@@ -56,6 +56,7 @@ export class LoginFormComponent {
         this.alertMessage.set('El usuario o contraseña son incorrectos');
         this.loginStatus.emit('notFound');
         this.isSubmiting.set(false);
+        this.hasBeenSubmited.set(false);
       }
     });
   }

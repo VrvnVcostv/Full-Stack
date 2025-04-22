@@ -37,8 +37,6 @@ export class RegisterFormBoxComponent {
     confirmPassword: signal(''),
   };
 
-  userUpload!: UserDTO;
-
   async onSubmit() {
     this.hasBeenSubmited.set(true)
     const file = this.photoFile();
@@ -57,7 +55,7 @@ export class RegisterFormBoxComponent {
     if (emailTaken || usernameTaken) return;
 
     this.startSubmitting();
-    await this.uploadPhoto(file);
+    this.uploadPhoto(file);
   }
 
   private uploadPhoto(file: File): void {
@@ -78,7 +76,6 @@ export class RegisterFormBoxComponent {
           },
           error: (err) => {
             this.hasBeenSubmited.set(false);
-            console.error("Error registrando:", err);
             this.registerStatus.emit("error");
           }
         })
@@ -115,15 +112,11 @@ export class RegisterFormBoxComponent {
 
   private validateForm(email: string, username: string, password: string, confirmPassword: string): boolean {
 
-
     if (!email.trim() || !username.trim() || !password.trim() || !confirmPassword.trim()) {
       this.alertMessage.set("Los campos no pueden estar vacíos");
       return false;
     }
-    if (!this.isValidEmail(email)) {
-      this.alertMessage.set("El email no es válido");
-      return false;
-    }
+
     if (password !== confirmPassword) {
       this.alertMessage.set("Las contraseñas no coinciden");
       return false;
