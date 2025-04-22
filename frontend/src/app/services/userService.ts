@@ -18,12 +18,6 @@ export class UserService {
     return firstValueFrom(this.getAll());
   }
 
-  getByEmail(email: string): Observable<UserDTO | undefined> {
-    return this.getAll().pipe(
-      map(users => users.find(u => u.email === email))
-    );
-  }
-
   create(user: Partial<UserDTO>): Observable<any> {
     return this.http.post(this.baseUrl, user);
   }
@@ -48,10 +42,4 @@ export class UserService {
     );
   }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post('http://localhost:8080/users/auth/login', {
-      email,
-      password
-    });
-  }
 }

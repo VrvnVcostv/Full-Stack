@@ -8,12 +8,13 @@ import { SessionService } from '../../services/sessionService';
 
 @Component({
   selector: 'login-page',
+  standalone: true,
   imports: [LoginFormComponent, BannerComponent, AlertComponent, CommonModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css',
 })
 export class LoginPageComponent {
-  constructor(private routes: Router, private sessionService: SessionService) {sessionService.clear()}
+  constructor(private routes: Router, private sessionService: SessionService) {}
 
   // Booleanos de validación de campos
   isAlertVisible: WritableSignal<boolean> = signal(false);

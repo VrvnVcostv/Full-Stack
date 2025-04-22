@@ -121,7 +121,7 @@ export class RegisterFormBoxComponent {
   }
 
   private async checkEmailExists(email: string): Promise<boolean> {
-    const exists = await firstValueFrom(this.userService.emailExists(email));
+    const exists = await firstValueFrom<boolean>(this.userService.emailExists(email));
     if (exists) {
       this.alertMessage.set("El correo no está disponible");
     }
@@ -129,7 +129,7 @@ export class RegisterFormBoxComponent {
   }
 
   private async checkUsernameExists(email: string): Promise<boolean> {
-    const exists = await firstValueFrom(this.userService.usernameExists(email));
+    const exists = await firstValueFrom<boolean>(this.userService.usernameExists(email));
     if (exists) {
       this.alertMessage.set("El usuario no está disponible");
     }

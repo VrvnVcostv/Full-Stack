@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'register-page',
+  standalone: true,
   imports: [RegisterFormBoxComponent, BannerComponent, CommonModule, AlertComponent],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.css',

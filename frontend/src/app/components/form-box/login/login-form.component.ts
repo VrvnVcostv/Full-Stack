@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../../services/userService';
 import { SessionService } from '../../../services/sessionService';
-import { UserDTO } from '../../../interfaces/DTO/userDTO';
+import { AuthService } from '../../../services/auth.service';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { UserDTO } from '../../../interfaces/DTO/userDTO';
 })
 
 export class LoginFormComponent {
-  constructor(private userService: UserService, private sessionService: SessionService) { }
+  constructor(private userService: UserService, private authService: AuthService) { }
 
   user: UserForm = {
     photo: signal(''),
@@ -46,9 +46,8 @@ export class LoginFormComponent {
   }
 
   private async login(email: string, password: string): Promise<void> {
-    this.userService.login(email, password).subscribe({
+    this.authService.login(email, password).subscribe({
       next: () => {
-        this.storeUserData(email);
         this.alertMessage.set('');
         this.loginStatus.emit('success');
         this.isSubmiting.set(false);
@@ -81,15 +80,4 @@ export class LoginFormComponent {
     return true;
   }
 
-  private storeUserData(email: string){
-    this.userService.getByEmail(email).subscribe({
-      next: (res) => {
-        if(res){
-          this.sessionService.setUser(res);
-        }
-      },
-      error: () => {
-      }
-    })
-  }
 }
