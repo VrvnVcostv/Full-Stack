@@ -29,7 +29,7 @@ export class RegisterFormBoxComponent {
   hasBeenSubmited: WritableSignal<boolean> = signal(false);
   alertMessage: WritableSignal<string> = signal("");
 
-  user: UserForm = {
+  userInputText: UserForm = {
     photo: signal(''),
     username: signal(''),
     email: signal(''),
@@ -37,55 +37,85 @@ export class RegisterFormBoxComponent {
     confirmPassword: signal(''),
   };
 
+  userUpload!: UserDTO;
+
   async onSubmit() {
+    this.hasBeenSubmited.set(true)
     const file = this.photoFile();
     if (!this.fileExists(file!)) return;
-
     const form = this.validateForm(
-      this.user.email(),
-      this.user.username(),
-      this.user.password(),
-      this.user.confirmPassword()
+      this.userInputText.email(),
+      this.userInputText.username(),
+      this.userInputText.password(),
+      this.userInputText.confirmPassword()
     );
 
     if (!file || !form) return;
-    if (!this.userService.emailExists(this.user.email())) return;
-    if(!this.userService.usernameExists(this.user.username())){return};
-    this.isSubmiting.set(true);
-    this.isSubmitingEmitter.emit(true);
-    this.uploadPhoto(file);
+    const emailTaken = await this.checkEmailExists(this.userInputText.email());
+    const usernameTaken = await this.checkUsernameExists(this.userInputText.username());
+
+    if (emailTaken || usernameTaken) return;
+
+    this.startSubmitting();
+    await this.uploadPhoto(file);
   }
 
-  private uploadPhoto(file: File): void{
-    this.cloudinaryService.uploadImage(file).pipe(
-      finalize(() =>{
-        this.isSubmiting.set(false)
-        this.isSubmitingEmitter.emit(false);
-      })).subscribe({
+  private uploadPhoto(file: File): void {
+    this.cloudinaryService.uploadImage(file).subscribe({
       next: (res: any) => {
-        this.user.photo.set(res.secure_url);
-        const body: UserDTO ={
-          username: this.user.username(),
-          email : this.user.email(),
-          password : this.user.password(),
-          photo : res.secure_url
+        this.userInputText.photo.set(res.secure_url);
+        const upload: UserDTO = {
+          username: this.userInputText.username(),
+          email: this.userInputText.email(),
+          password: this.userInputText.password(),
+          photo: res.secure_url
         }
-        this.authService.register(body).subscribe({
+        this.authService.register(upload).pipe(
+          finalize(() => {this.stopSubmitting();})
+        ).subscribe({
           next: () => {
             this.registerStatus.emit("success");
           },
           error: (err) => {
+            this.hasBeenSubmited.set(false);
             console.error("Error registrando:", err);
             this.registerStatus.emit("error");
           }
-        });
+        })
       },
-      error: (err) => this.registerStatus.emit('error')
+      error: (err) => {this.registerStatus.emit('error'); this.hasBeenSubmited.set(false);}
     });
   }
 
+  private async checkEmailExists(email: string): Promise<boolean> {
+    const exists = await firstValueFrom(this.userService.emailExists(email));
+    if (exists) {
+      this.alertMessage.set("El correo no está disponible");
+    }
+    return exists;
+  }
+
+  private async checkUsernameExists(username: string): Promise<boolean> {
+    const exists = await firstValueFrom(this.userService.usernameExists(username));
+    if (exists) {
+      this.alertMessage.set("El usuario no está disponible");
+    }
+    return exists;
+  }
+
+  private startSubmitting() {
+    this.isSubmiting.set(true);
+    this.isSubmitingEmitter.emit(true);
+  }
+
+  private stopSubmitting(): void {
+    this.isSubmiting.set(false);
+    this.isSubmitingEmitter.emit(false);
+  }
 
   private validateForm(email: string, username: string, password: string, confirmPassword: string): boolean {
+
+
     if (!email.trim() || !username.trim() || !password.trim() || !confirmPassword.trim()) {
       this.alertMessage.set("Los campos no pueden estar vacíos");
       return false;
@@ -98,7 +128,7 @@ export class RegisterFormBoxComponent {
       this.alertMessage.set("Las contraseñas no coinciden");
       return false;
     }
-    if (!this.isValidPassword(password)){
+    if (!this.isValidPassword(password)) {
       this.alertMessage.set("La contraseña necesita mínimo 8 caractéres");
       return false;
     }
@@ -113,7 +143,7 @@ export class RegisterFormBoxComponent {
     return true;
   }
 
-  private isValidPassword(password: string){
+  private isValidPassword(password: string) {
     const passwordValid = password.length >= 8;
     return passwordValid;
   }

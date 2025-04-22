@@ -28,9 +28,7 @@ export class LoginPageComponent {
     switch (status) {
       case 'success':
         this.isAlertVisible.set(true);
-        this.alertMessage.set("Iniciando Sesión");
-        this.icon.set('loading');
-        this.color.set('success');
+        this.customizeAlert("Iniciando Sesión", "loading", "success");
         setTimeout(() => {
           this.isAlertVisible.set(false);
         }, 1250);
@@ -48,5 +46,11 @@ export class LoginPageComponent {
         //TODO
         break;
     }
+  }
+
+  private customizeAlert(message: string, icon : "success" | "loading" | "failed", color : "success" | "danger" | "warning") {
+    this.alertMessage.set(message);
+    this.icon.set(icon);
+    this.color.set(color);
   }
 }

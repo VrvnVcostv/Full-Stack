@@ -27,9 +27,7 @@ export class RegisterPageComponent {
     switch (status) {
       case 'success':
         this.isAlertVisible.set(true);
-        this.alertMessage.set('Usuario registrado correctamente');
-        this.icon.set('success');
-        this.color.set('success');
+        this.customizeAlert("Usuario registrado correctamente", "success", "success");
         setTimeout(() => {
           this.isAlertVisible.set(false);
         }, 1250);
@@ -38,10 +36,15 @@ export class RegisterPageComponent {
         }, 2000);
         break;
       case 'error':
-        this.alertMessage.set('Ha ocurrido un error');
-        this.icon.set('failed');
-        this.color.set('danger');
+        this.customizeAlert("Ha ocurrido un error", "failed", "danger");
         break;
     }
   }
+
+  private customizeAlert(message: string, icon : "success" | "loading" | "failed", color : "success" | "danger" | "warning") {
+    this.alertMessage.set(message);
+    this.icon.set(icon);
+    this.color.set(color);
+  }
 }
+

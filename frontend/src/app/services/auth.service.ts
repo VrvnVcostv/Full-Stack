@@ -11,12 +11,12 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<{ token: string, refreshToken: string }>(
+    return this.http.post<{ accessToken: string, refreshToken: string }>(
       'http://localhost:8080/auth/login',
       { email, password }
     ).pipe(
       map(response => {
-        localStorage.setItem('accessToken', response.token);
+        localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('refreshToken', response.refreshToken);
         return response;
       })
@@ -24,14 +24,14 @@ export class AuthService {
   }
 
   register(user: UserDTO): Observable<any> {
-    return this.http.post<{ token: string, refreshToken: string }>(
+    return this.http.post<{ accessToken: string, refreshToken: string }>(
       'http://localhost:8080/auth/register',
       user
     ).pipe(
       map(response => {
-        console.log(response.token);
+        console.log(response.accessToken);
         console.log(response.refreshToken);
-        localStorage.setItem('accessToken', response.token);
+        localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('refreshToken', response.refreshToken);
         return response;
       })
