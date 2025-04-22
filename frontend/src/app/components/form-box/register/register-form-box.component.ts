@@ -8,6 +8,8 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { finalize, firstValueFrom } from 'rxjs';
 import { UserService } from '../../../services/userService';
+import { AuthService } from '../../../services/auth.service';
+import { UserDTO } from '../../../interfaces/DTO/userDTO';
 
 @Component({
   selector: 'register-form-box',
@@ -15,7 +17,7 @@ import { UserService } from '../../../services/userService';
   templateUrl: './register-form-box.component.html',
 })
 export class RegisterFormBoxComponent {
-  constructor(private cloudinaryService: CloudinaryService, private userService: UserService) { }
+  constructor(private cloudinaryService: CloudinaryService, private userService: UserService, private authService: AuthService) { }
 
   //Outputs al padre
   isSubmitingEmitter = output<boolean>();
@@ -35,7 +37,6 @@ export class RegisterFormBoxComponent {
     confirmPassword: signal(''),
   };
 
-
   async onSubmit() {
     const file = this.photoFile();
     if (!this.fileExists(file!)) return;
@@ -48,18 +49,14 @@ export class RegisterFormBoxComponent {
     );
 
     if (!file || !form) return;
-
-    const emailTaken = await this.checkEmailExists(this.user.email());
-    if (emailTaken) return;
-    const usernameTaken = await this.checkUsernameExists(this.user.username());
-    if(usernameTaken){return};
-
+    if (!this.userService.emailExists(this.user.email())) return;
+    if(!this.userService.usernameExists(this.user.username())){return};
     this.isSubmiting.set(true);
     this.isSubmitingEmitter.emit(true);
     this.uploadPhoto(file);
   }
 
-  private uploadPhoto(file: File) {
+  private uploadPhoto(file: File): void{
     this.cloudinaryService.uploadImage(file).pipe(
       finalize(() =>{
         this.isSubmiting.set(false)
@@ -67,27 +64,23 @@ export class RegisterFormBoxComponent {
       })).subscribe({
       next: (res: any) => {
         this.user.photo.set(res.secure_url);
-        const body = {
+        const body: UserDTO ={
           username: this.user.username(),
-          email: this.user.email(),
-          password: this.user.password(),
-          photo: res.secure_url
-        };
-        this.registerUser(body);
+          email : this.user.email(),
+          password : this.user.password(),
+          photo : res.secure_url
+        }
+        this.authService.register(body).subscribe({
+          next: () => {
+            this.registerStatus.emit("success");
+          },
+          error: (err) => {
+            console.error("Error registrando:", err);
+            this.registerStatus.emit("error");
+          }
+        });
       },
       error: (err) => this.registerStatus.emit('error')
-    });
-  }
-
-  private registerUser(body: { username: string; email: string; password: string; photo: string; }) {
-    this.alertMessage.set("");
-    this.userService.create(body).pipe(
-      finalize (() => {
-        this.hasBeenSubmited.set(true);
-        this.isSubmiting.set(false);
-      })).subscribe({
-      next: () => this.registerStatus.emit('success'),
-      error: () => this.registerStatus.emit('error')
     });
   }
 
@@ -118,22 +111,6 @@ export class RegisterFormBoxComponent {
       return false;
     }
     return true;
-  }
-
-  private async checkEmailExists(email: string): Promise<boolean> {
-    const exists = await firstValueFrom<boolean>(this.userService.emailExists(email));
-    if (exists) {
-      this.alertMessage.set("El correo no está disponible");
-    }
-    return exists;
-  }
-
-  private async checkUsernameExists(email: string): Promise<boolean> {
-    const exists = await firstValueFrom<boolean>(this.userService.usernameExists(email));
-    if (exists) {
-      this.alertMessage.set("El usuario no está disponible");
-    }
-    return exists;
   }
 
   private isValidPassword(password: string){

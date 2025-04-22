@@ -8,7 +8,7 @@ import { firstValueFrom, map, Observable } from 'rxjs';
 export class UserService {
   private baseUrl = 'http://localhost:8080/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<UserDTO[]> {
     return this.http.get<UserDTO[]>(this.baseUrl);
@@ -31,15 +31,11 @@ export class UserService {
   }
 
   emailExists(email: string): Observable<boolean> {
-    return this.getAll().pipe(
-      map(users => users.some(u => u.email === email))
-    );
+    return this.http.get<boolean>(`http://localhost:8080/users/exists/email?email=${email}`);
   }
 
   usernameExists(username: string): Observable<boolean> {
-    return this.getAll().pipe(
-      map(users => users.some(u => u.username === username))
-    );
+    return this.http.get<boolean>(`http://localhost:8080/users/exists/username?username=${username}`);
   }
 
 }
