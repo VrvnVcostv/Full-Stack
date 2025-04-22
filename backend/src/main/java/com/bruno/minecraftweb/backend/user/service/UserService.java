@@ -1,6 +1,7 @@
-package com.bruno.minecraftweb.backend.Service;
+package com.bruno.minecraftweb.backend.user.service;
 
-import com.bruno.minecraftweb.backend.Entities.User;
+
+import com.bruno.minecraftweb.backend.user.entities.User;
 
 import java.util.List;
 import java.util.Optional;

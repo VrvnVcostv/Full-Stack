@@ -1,6 +1,6 @@
-package com.bruno.minecraftweb.backend.Repository;
+package com.bruno.minecraftweb.backend.user.repository;
 
-import com.bruno.minecraftweb.backend.Entities.User;
+import com.bruno.minecraftweb.backend.user.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

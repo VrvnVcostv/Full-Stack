@@ -1,4 +1,4 @@
-package com.bruno.minecraftweb.backend.Entities;
+package com.bruno.minecraftweb.backend.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

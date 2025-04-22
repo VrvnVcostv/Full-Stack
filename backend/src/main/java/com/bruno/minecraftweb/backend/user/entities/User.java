@@ -1,17 +1,20 @@
-package com.bruno.minecraftweb.backend.Entities;
+package com.bruno.minecraftweb.backend.user.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.bruno.minecraftweb.backend.auth.dto.TokenResponse;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
 @Document(collection = "Users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class User {
 
     @Id

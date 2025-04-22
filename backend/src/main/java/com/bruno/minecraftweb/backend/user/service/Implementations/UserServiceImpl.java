@@ -1,8 +1,8 @@
-package com.bruno.minecraftweb.backend.Service.Implementations;
+package com.bruno.minecraftweb.backend.user.service.Implementations;
 
-import com.bruno.minecraftweb.backend.Entities.User;
-import com.bruno.minecraftweb.backend.Repository.UserRepository;
-import com.bruno.minecraftweb.backend.Service.UserService;
+import com.bruno.minecraftweb.backend.user.entities.User;
+import com.bruno.minecraftweb.backend.user.repository.UserRepository;
+import com.bruno.minecraftweb.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
