@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { SessionService } from '../../services/sessionService';
-import { ImageHolderComponent } from "../../components/image-holder/image-holder.component";
-import { BannerComponent } from "../../shared/banner/banner.component";
 import { NavbarComponent } from "../../shared/navbar/navbar.component";
 
 @Component({

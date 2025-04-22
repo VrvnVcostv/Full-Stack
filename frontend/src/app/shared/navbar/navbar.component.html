@@ -1,12 +1,32 @@
-<nav class="navbar sticky-top bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand text-white">Main</a>
-    <div>
-      <div class="d-flex align-items-center">
-        <img src="..." alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-        <span class="ms-2">Usuario</span>
-      </div>
-      <a class="d-flex navbar-brand text-white">Jhon Doe</a>
-    </div>
+<nav class="d-flex flex-column bg-dark text-white vh-100 p-3" style="width: 250px; position: fixed; top: 0; left: 0;">
+  <a class="navbar-brand text-white mb-4">Main</a>
+
+  <!-- Avatar principal -->
+  <div class="d-flex align-items-center mb-4">
+    <img src="assets/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+    <span class="ms-2">Usuario</span>
   </div>
+
+  <!-- Nombre del usuario -->
+  <a class="navbar-brand text-white mb-4">Jhon Doe</a>
+
+<!-- Contenedores de imagen con navegación -->
+<div class="d-flex flex-column gap-3">
+  <a routerLink="/crafters" class="sidebar-icon bg-secondary rounded p-2 d-flex justify-content-center align-items-center" style="height: 80px;">
+    <img src="assets/icons/crafters.png" alt="Crafters" style="max-height: 100%; max-width: 100%;">
+  </a>
+
+  <a routerLink="/store" class="sidebar-icon bg-secondary rounded p-2 d-flex justify-content-center align-items-center" style="height: 80px;">
+    <img src="assets/icons/store.png" alt="Store" style="max-height: 100%; max-width: 100%;">
+  </a>
+
+  <a routerLink="/stash" class="sidebar-icon bg-secondary rounded p-2 d-flex justify-content-center align-items-center" style="height: 80px;">
+    <img src="assets/icons/stash.png" alt="Stash" style="max-height: 100%; max-width: 100%;">
+  </a>
+
+  <a routerLink="/quests" class="sidebar-icon bg-secondary rounded p-2 d-flex justify-content-center align-items-center" style="height: 80px;">
+    <img src="assets/icons/quests.png" alt="Quests" style="max-height: 100%; max-width: 100%;">
+  </a>
+</div>
+
 </nav>
