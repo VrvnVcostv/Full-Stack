@@ -83,4 +83,22 @@ public class AuthServiceImpl implements AuthService {
         tokenService.saveToken(user, accessToken);
         return new TokenResponse(accessToken, refreshToken);
     }
+
+    @Override
+    public User getUserByToken(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+            System.out.println("Invalid Bearer");
+        }
+        String refreshToken = authHeader.substring(7);
+        String email = jwtService.extractUsername(refreshToken);
+        if (email == null){
+            System.out.println("Invalid Refresh token");
+        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow();
+        if(!jwtService.isTokenValid(refreshToken, user)){
+            System.out.println("Invalid Refresh token");
+        }
+        return user;
+    }
 }

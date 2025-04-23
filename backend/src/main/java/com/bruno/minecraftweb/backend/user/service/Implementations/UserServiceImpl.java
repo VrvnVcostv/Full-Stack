@@ -1,5 +1,6 @@
 package com.bruno.minecraftweb.backend.user.service.Implementations;
 
+import com.bruno.minecraftweb.backend.auth.dto.TokenResponse;
 import com.bruno.minecraftweb.backend.user.entities.User;
 import com.bruno.minecraftweb.backend.user.repository.UserRepository;
 import com.bruno.minecraftweb.backend.user.service.UserService;

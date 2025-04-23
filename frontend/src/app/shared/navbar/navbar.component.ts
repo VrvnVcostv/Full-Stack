@@ -1,5 +1,7 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { UserDTO } from '../../interfaces/DTO/userDTO.interface';
 
 @Component({
   selector: 'navbar',
@@ -9,27 +11,20 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class NavbarComponent {
 
-  constructor(private routes: Router) {}
+  userInfo!: UserDTO;
 
-  handleLoginStatus(status: 'success' | 'notFound' | 'wrongPassword' | 'invalidForm') {
-    switch (status) {
-      case 'success':
-
-        setTimeout(() => {
-        }, 1250);
-        setTimeout(() => {
-          this.routes.navigate(['main']);
-        }, 2000);
-        break;
-      case 'notFound':
-        //TODO
-        break;
-      case 'wrongPassword':
-        //TODO
-        break;
-      case 'invalidForm':
-        //TODO
-        break;
-    }
+  constructor(private routes: Router, private auth: AuthService) {
+    this.auth.getCurrentUser().subscribe({
+      next: (res: UserDTO) => {
+        console.log(res.email);
+        console.log(res.password);
+        console.log(res.photo);
+        console.log(res.username);
+        this.userInfo = res
+      }
+    })
+    console.log(this.userInfo);
   }
+
+
 }

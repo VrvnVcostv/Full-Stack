@@ -1,6 +1,9 @@
 package com.bruno.minecraftweb.backend.user.controllers;
 
 import com.bruno.minecraftweb.backend.auth.dto.LoginRequest;
+import com.bruno.minecraftweb.backend.auth.dto.TokenResponse;
+import com.bruno.minecraftweb.backend.auth.service.JwtService;
+import com.bruno.minecraftweb.backend.auth.service.TokenService;
 import com.bruno.minecraftweb.backend.user.entities.User;
 import com.bruno.minecraftweb.backend.auth.service.AuthService;
 import com.bruno.minecraftweb.backend.user.repository.UserRepository;
@@ -8,6 +11,7 @@ import com.bruno.minecraftweb.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +27,6 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private AuthService authService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

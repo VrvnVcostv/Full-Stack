@@ -3,12 +3,11 @@
 
   <!-- Avatar principal -->
   <div class="d-flex align-items-center mb-4">
-    <img src="assets/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-    <span class="ms-2">Usuario</span>
+    <img [src]="this.userInfo.photo" alt="Avatar" class="rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">
   </div>
 
   <!-- Nombre del usuario -->
-  <a class="navbar-brand text-white mb-4">Jhon Doe</a>
+  <a class="navbar-brand text-white mb-4">{{this.userInfo.username}}</a>
 
 <!-- Contenedores de imagen con navegación -->
 <div class="d-flex flex-column gap-3">

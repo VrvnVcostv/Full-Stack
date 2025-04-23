@@ -1,15 +1,15 @@
 import { Component, output, signal, WritableSignal } from '@angular/core';
 import { InputBoxComponent } from '../../input-box/input-box.component';
-import { UserForm } from '../../../interfaces/Form/userForm';
+import { UserForm } from '../../../interfaces/Form/userForm.interface';
 import { FormsModule } from '@angular/forms';
 import { ImageBoxComponent } from "../../image-box/image-box.component";
-import { CloudinaryService } from '../../../services/cloudinaryService';
+import { CloudinaryService } from '../../../services/cloudinary.service';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { finalize, firstValueFrom } from 'rxjs';
-import { UserService } from '../../../services/userService';
+import { UserService } from '../../../services/user.service';
+import { UserDTO } from '../../../interfaces/DTO/userDTO.interface';
 import { AuthService } from '../../../services/auth.service';
-import { UserDTO } from '../../../interfaces/DTO/userDTO';
 
 @Component({
   selector: 'register-form-box',

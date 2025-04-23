@@ -8,5 +8,6 @@ public interface JwtService {
     String generateRefreshToken(final User user);
     String buildToken(final User user, long expiration);
     String extractUsername(String token);
+    User extractUser(String token);
     boolean isTokenValid(String refreshToken, User user);
 }

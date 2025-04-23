@@ -1,15 +1,16 @@
 import { Component, output, signal, WritableSignal } from '@angular/core';
-import { UserForm } from '../../../interfaces/Form/userForm';
+import { UserForm } from '../../../interfaces/Form/userForm.interface';
 import { InputBoxComponent } from '../../input-box/input-box.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { UserService } from '../../../services/userService';
+import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 
 
 @Component({
   selector: 'login-form-box',
+  standalone: true,
   imports: [InputBoxComponent, FormsModule, CommonModule, RouterLink],
   templateUrl: './login-form-box.component.html',
 })

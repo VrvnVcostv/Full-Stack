@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from "@angular/core";
-import { UserDTO } from "../interfaces/DTO/userDTO";
+import { UserDTO } from "../interfaces/DTO/userDTO.interface";
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {

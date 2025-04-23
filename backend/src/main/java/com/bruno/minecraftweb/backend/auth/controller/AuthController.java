@@ -4,6 +4,7 @@ import com.bruno.minecraftweb.backend.auth.dto.LoginRequest;
 import com.bruno.minecraftweb.backend.auth.dto.RegisterRequest;
 import com.bruno.minecraftweb.backend.auth.dto.TokenResponse;
 import com.bruno.minecraftweb.backend.auth.service.AuthService;
+import com.bruno.minecraftweb.backend.user.entities.User;
 import com.bruno.minecraftweb.backend.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +35,12 @@ public class AuthController {
     private ResponseEntity<TokenResponse> register(@RequestBody RegisterRequest request){
         TokenResponse token = authService.register(request);
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping("/me")
+    private ResponseEntity<User> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION)  String authHeader){
+        User user = authService.getUserByToken(authHeader);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/refresh")

@@ -4,7 +4,7 @@ import { LoginFormComponent } from "../../components/form-box/login/login-form-b
 import { BannerComponent } from "../../shared/banner/banner.component";
 import { AlertComponent } from "../../shared/alert/alert.component";
 import { CommonModule } from '@angular/common';
-import { SessionService } from '../../services/sessionService';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'login-page',

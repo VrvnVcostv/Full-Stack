@@ -58,6 +58,23 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public User extractUser(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        User user = new User();
+        user.setId(claims.get("id", String.class));
+        user.setUsername(claims.get("username", String.class));
+        user.setEmail(claims.get("email", String.class));
+        user.setPhoto(claims.get("photo", String.class));
+
+        return user;
+    }
+
+    @Override
     public boolean isTokenValid(String refreshToken, User user) {
         String email = extractUsername(refreshToken);
         return (user.getEmail().equals(email) && !isTokenExpired(refreshToken));

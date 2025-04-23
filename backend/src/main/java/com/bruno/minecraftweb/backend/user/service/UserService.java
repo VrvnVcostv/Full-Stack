@@ -1,6 +1,7 @@
 package com.bruno.minecraftweb.backend.user.service;
 
 
+import com.bruno.minecraftweb.backend.auth.dto.TokenResponse;
 import com.bruno.minecraftweb.backend.user.entities.User;
 
 import java.util.List;
