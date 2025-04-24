@@ -1,0 +1,8 @@
+.static-background {
+    display: block;
+    height: 100vh;
+    background-image: url('/assets/backgrounds/cobblestone_1.png');
+    background-size: cover;
+    background-position: center;
+  }
+  
